@@ -19,7 +19,7 @@
     <br>
     <div style="display: flex;justify-content: center;">
     <el-button @click="handlePush" type="success" size="danger" style="border-radius: 10px;" to="/userInfo">
-      <h2 style="font-size: 20px;">个人信息</h2>
+      <h2 style="font-size: 20px;">用户管理</h2>
     </el-button>
     </div>
   </div>
@@ -29,7 +29,7 @@
   export default{
     methods: {
       handlePush(){
-        this.$router.push('/personPage')
+        this.$router.push('/userInfo')
       }
     },
   }

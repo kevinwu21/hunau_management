@@ -1,100 +1,86 @@
 package com.kevin.springboot.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.kevin.springboot.common.Constants;
+import com.kevin.springboot.common.Result;
 import com.kevin.springboot.controller.dto.UserDTO;
-import com.kevin.springboot.entity.User;
-import com.kevin.springboot.mapper.UserMapper;
-import com.kevin.springboot.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kevin.springboot.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import com.kevin.springboot.service.IUserService;
+import com.kevin.springboot.entity.User;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 用户操作
- * @author: KevinWu
- * 2022/6/7 10:28 PM
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author Kevin
+ * @since 2022-06-14
  */
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-//    @Autowired  //引入userMapper
-//    private UserMapper userMapper;
-    @Autowired  //引入userService
-    private UserService userService;
+    @Resource
+    private IUserService userService;
 
-    // 增和改
+    // 新增或者更新
     @PostMapping
-    public boolean saveUser(@RequestBody User admin){
-        return userService.saveUser(admin);
+    public Result save(@RequestBody User user) {
+        return Result.success(userService.saveOrUpdate(user));
     }
 
-    // 删
+    //删除单条记录
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Integer id){
-//        return userMapper.deleteByID(id);
-        return userService.removeById(id);
+    public Result delete(@PathVariable Integer id) {
+        return Result.success(userService.removeById(id)) ;
     }
 
-    // 批量删
     @PostMapping("/batch")
-    public boolean deleteBatch(@RequestBody List<Integer> ids){
-        return userService.removeBatchByIds(ids);
+    public Result deleteBatch(@RequestBody List<Integer> ids) {
+        return Result.success(userService.removeByIds(ids));
     }
 
-    // 查
     @GetMapping
-    public List<User> findAll(){
-
-//        List<User> all = userMapper.findAll();
-//        return all;
-        return userService.list();
+    public Result findAll() {
+        return Result.success(userService.list());
     }
 
-    // 分页查询(自己实现)
-    // 接口路径：/user/page?pageNum=1&pageSize=5
-    // @RequestParam接收
-    // limit 第一个参数 =（pageNum - 1）* pageSize
-//    @GetMapping("/page")
-//    public Map<String, Object> findPage(@RequestParam Integer pageNum,
-//                                        @RequestParam Integer pageSize,
-//                                        @RequestParam String username,
-//                                        @RequestParam String email,
-//                                        @RequestParam String address){
-//        pageNum = (pageNum - 1) * pageSize;
-//        List<User> data = userMapper.selectPage(pageNum,pageSize,username,email,address);
-//        Integer total = userMapper.selectTotal(username,email,address);
-//        Map<String, Object> res = new HashMap<>();
-//        res.put("data",data);
-//        res.put("total",total);
-//        return res;
-//    }
+    @GetMapping("/{id}")
+    public Result findOne(@PathVariable Integer id) {
+        return Result.success(userService.getById(id));
+    }
 
-    // 分页查询（ Mybatis_Plus方式 分页助手）
+    @GetMapping("/username/{username}")
+    public Result findOne(@PathVariable String username) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        return Result.success(userService.getOne(queryWrapper));
+    }
+
     @GetMapping("/page")
-    public IPage<User> findPage(@RequestParam Integer pageNum,
-                                @RequestParam Integer pageSize,
-                                @RequestParam(defaultValue = "") String username,
-                                @RequestParam(defaultValue = "") String email,
-                                @RequestParam(defaultValue = "") String address){
-        IPage<User> page = new Page<>(pageNum, pageSize);
-        //QueryWrapper实现 查询功能
+    public Result findPage(@RequestParam Integer pageNum,
+                               @RequestParam Integer pageSize,
+                               @RequestParam(defaultValue = "") String username,
+                               @RequestParam(defaultValue = "") String email,
+                               @RequestParam(defaultValue = "") String address) {
+        // QueryWrapper实现 查询功能
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (!"".equals(username)){
             queryWrapper.like("username",username);
@@ -106,8 +92,14 @@ public class UserController {
             queryWrapper.like("address",address);
         }
 
-        return userService.page(page,queryWrapper);
+        // Token获取当前用户信息
+        User currentUser = TokenUtils.getCurrentUser();
+        System.out.println("============当前用户是：=============\n"+currentUser.getUsername()+" "+currentUser.getNickname()+"\n===============================");
+
+        return Result.success(userService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
+
+
 
     /**
      * excel 导出接口
@@ -148,7 +140,7 @@ public class UserController {
      * excel 导入接口
      */
     @PostMapping("/import")
-    public Boolean imp(MultipartFile file) throws Exception {
+    public Result imp(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
         // 方式1：通过 javabean的方式读取Excel内的对象，但是要求表头必须是英文，跟javabean的属性要对应起来
@@ -170,14 +162,31 @@ public class UserController {
         }
 
         userService.saveBatch(users);
-        return true;
+        return Result.success(true);
     }
 
+    // 登陆接口
+    @PostMapping("/login")
+    public Result login(@RequestBody UserDTO userDTO){
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)){
+            return Result.error(Constants.CODE_400,"参数错误");
+        }
+        UserDTO dto = userService.login(userDTO);
 
-//    @PostMapping
-//    public boolean login(@RequestBody UserDTO userDTO){
-//        return userService.login(userDTO);
-//    }
-
+        return Result.success(dto);
+    }
+    // 注册接口
+    @PostMapping("/register")
+    public Result register(@RequestBody UserDTO userDTO){
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)){
+            return Result.error(Constants.CODE_400,"参数错误");
+        }
+        return Result.success(userService.register(userDTO));
+    }
 
 }
+

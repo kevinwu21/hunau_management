@@ -188,11 +188,14 @@ export default {
     },
     // 搜索按钮
     search() {
-      this.load();
+      console.log(this.pageNum);
+      this.pageNum = 1 //非常重要 否则当查询非第一页数据时 查询出的记录会显示不出来
+      this.load()
+      console.log(this.pageNum);
     },
     // 聚焦搜索框时,按enter回车执行搜索按钮
     enterKey() {
-      this.load();
+      this.search()
     },
     // 添加
     handleAdd() {
