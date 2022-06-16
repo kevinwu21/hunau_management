@@ -10,11 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * <p>
- * 
- * </p>
- *
+/** 实体类
  * @author Kevin
  * @since 2022-06-14
  */

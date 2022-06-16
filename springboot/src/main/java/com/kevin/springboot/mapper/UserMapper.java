@@ -3,11 +3,7 @@ package com.kevin.springboot.mapper;
 import com.kevin.springboot.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-/**
- * <p>
- *  Mapper 接口
- * </p>
- *
+/**Mapper 接口
  * @author Kevin
  * @since 2022-06-14
  */

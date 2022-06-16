@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
+/**配置拦截器 结合Token
  * @author: KevinWu
  * 2022/6/15 6:21 PM
  */
@@ -18,7 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 // 拦截所有请求，通过判断token是否合法来决定是否需要登录
                 .addPathPatterns("/**")
                 // 放行以下路由传来的请求
-                .excludePathPatterns("/user/login","/user/register","/**/export","/**/import");
+                .excludePathPatterns("/user/login","/user/register","/**/export","/**/import","/file/**");
     }
 
     @Bean

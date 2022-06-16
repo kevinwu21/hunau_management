@@ -7,6 +7,10 @@ spring:
     url: jdbc:mysql://localhost:3306/hunau_management?serverTimezone=GMT%2b8
     username: root
     password: 20020403DONG
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 500MB
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml #扫描所有mybatis的yml文件
@@ -16,3 +20,7 @@ mybatis:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+files:
+  upload:
+    path: /Users/KevinWu/Desktop/Project/hunau_management/files/

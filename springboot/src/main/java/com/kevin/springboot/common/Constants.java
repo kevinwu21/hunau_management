@@ -1,6 +1,6 @@
 package com.kevin.springboot.common;
 
-/**
+/**自定义状态码
  * @author: KevinWu
  * 2022/6/14 9:19 PM
  */

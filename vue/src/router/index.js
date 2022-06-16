@@ -14,6 +14,7 @@ const routes = [
       { path: 'homePage', name: '首页', component: () => import('../views/homePage.vue') },
       { path: 'userInfo', name: '用户管理', component: () => import('../views/userInfo.vue') },
       { path: 'personPage', name: '个人信息', component: () => import('../views/personPage.vue') },
+      { path: 'filesPage', name: '文件管理', component: () => import('../views/filesPage.vue') },
     ]
   },
   {

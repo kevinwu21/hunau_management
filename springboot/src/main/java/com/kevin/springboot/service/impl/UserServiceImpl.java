@@ -13,11 +13,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.kevin.springboot.utils.TokenUtils;
 import org.springframework.stereotype.Service;
 
-/**
- * <p>
- *  服务实现类
- * </p>
- *
+/**数据服务接口实现层
+ * 服务实现类
  * @author Kevin
  * @since 2022-06-14
  */

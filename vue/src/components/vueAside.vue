@@ -30,10 +30,10 @@
               <i class="el-icon-user"></i>
               <span>用户管理</span>
             </el-menu-item>
-            <!-- <el-menu-item index="2-2">
-              <i class="el-icon-user"></i>
-              <span>选项2</span>
-            </el-menu-item> -->
+            <el-menu-item index="/filesPage">
+              <i class="el-icon-files"></i>
+              <span>文件管理</span>
+            </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
 

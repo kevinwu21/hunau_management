@@ -4,11 +4,8 @@ import com.kevin.springboot.controller.dto.UserDTO;
 import com.kevin.springboot.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
+/**数据服务接口层
+ * 服务类
  * @author Kevin
  * @since 2022-06-14
  */

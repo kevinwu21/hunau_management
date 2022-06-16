@@ -92,7 +92,7 @@
       </el-dialog>
     </div>
 
-    <!-- footer -->
+    <!-- 分页组件 -->
     <div>
       <el-pagination
         background

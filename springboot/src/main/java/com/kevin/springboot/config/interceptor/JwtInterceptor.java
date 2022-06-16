@@ -17,7 +17,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
+/**配置Token
  * @author: KevinWu
  * 2022/6/15 6:03 PM
  */
