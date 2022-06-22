@@ -1,22 +1,13 @@
 <template>
   <div class="wrapper">
-    <div style="position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%,-50%);
-    background-color: #fff;
-    width: 340px;
-    height: 450px;
-    padding: 23px;
-    border-radius: 25px;
-    box-shadow:10px 10px 100px #555555dd;">
+    <div class="card">
       <div style="margin: 35px 0 40px 0; text-align: center; font-size: 22px;font-weight: lighter;">
         <img src="../../public/UncleKevin.png" style="max-width: 50px;margin-top: -15px;margin-bottom: 10px;">
-        <p style="font-weight: 350; color: #1f2d3d;font-size: 20px;">注 册</p>
+        <p style="font-weight: 350; color: #fff;font-size: 20px;">注 册</p>
       </div>
       <el-form :model="user" :rules="rules" ref="userForm">
         <el-form-item prop="username">
-          <el-input size="large" style="margin: 5px 0 5px 0" prefix-icon="el-icon-user" placeholder="用户名" v-model="user.username" @keyup.enter.native="enter('username')"></el-input>
+          <el-input size="large" style="margin: 5px 0 5px 0" prefix-icon="el-icon-user" placeholder="用户名" v-model="user.username" @keyup.enter.native="enter('username')" ref="id"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input size="large" style="margin: 3px 0 5px 0" prefix-icon="el-icon-lock" placeholder="密码" show-password v-model="user.password" @keyup.enter.native="enter('password')" ref="password"></el-input>
@@ -54,6 +45,9 @@ export default {
         ]
       }
     }
+  },
+  mounted() {
+    this.$refs.id.focus()
   },
   methods: {
     // 注册事件
@@ -99,8 +93,21 @@ export default {
 <style>
   .wrapper {
     height: 100vh;
-    background-image:linear-gradient(to bottom right, #FC466B , #3F5EFB);
+    background-image:url("../../public/img/landing-large.jpg");
+    background-size: cover;
     overflow: hidden;
+  }
+  .card{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-image:url("../../public/img/auth-widget-background.jpg");
+    width: 340px;
+    height: 450px;
+    padding: 25px;
+    border-radius: 25px;
+    box-shadow:10px 10px 100px #00000094;
   }
 </style>
 

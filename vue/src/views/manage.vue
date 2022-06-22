@@ -6,12 +6,12 @@
     <el-container>
       <!-- header -->
       <el-header style="border-bottom: 1px solid #e3e3e3;">
-        <vueHeader :collapseBtnClass="collapseBtnClass" :collapse="collapse"></vueHeader>
+        <vueHeader :collapseBtnClass="collapseBtnClass" :collapse="collapse" :user="user"></vueHeader>
       </el-header>
       <!-- main -->
       <el-main>
         <!--表示当前页面的子路由会在 router-view 中显示 -->
-        <router-view></router-view>
+        <router-view @refreshUser="getUser"></router-view>
       </el-main>
 
     </el-container>
@@ -33,6 +33,7 @@ export default {
       isCollapse: false,
       sideWidth: 200,
       logoTextShow: true,
+      user: {}
     };
   },
   // 注册组件
@@ -40,7 +41,20 @@ export default {
     vueAside,
     vueHeader
   },
+  created() {
+    // 从后台获取 User 数据
+    this.getUser()
+  },
   methods: {
+    getUser(){
+      let username=localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).username : ""
+      // 从后台获取 User 数据
+      this.request.get("/user/username/" + username).then(res => (
+        // 重新赋值后台的最新User数据
+        this.user = res.data
+      ))
+    },
+
     collapse() {
       // 点击收缩按钮触发
       this.isCollapse = !this.isCollapse;

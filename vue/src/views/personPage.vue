@@ -1,8 +1,8 @@
 <template>
-  <el-card style="width:700px;margin: 70px auto;border-radius: 20px;padding-top: 35px;">
+  <el-card style="width:700px;border-radius: 20px;padding-top: 35px; position: absolute;top:50%;left:50%;transform:translate(-35%,-50%);">
     <el-form :model="form" label-width="70px" size="large" style="margin-left: 30px;">
       <el-form-item label="用户名">
-        <el-input style="width: 300px;" v-model="form.username" autocomplete="off" placeholder="只可输入大小英文字母/下划线" prefix-icon="el-icon-user"></el-input>
+        <el-input disabled style="width: 300px;" v-model="form.username" autocomplete="off" placeholder="只可输入大小英文字母/下划线" prefix-icon="el-icon-user"></el-input>
           <el-upload
         class="avatar-uploader"
         action="http://localhost:8090/file/upload"
@@ -22,7 +22,7 @@
         <el-input style="width: 490px;" v-model="form.phone" autocomplete="off" placeholder="输入11位电话号码" maxlenth="11" minlenth="11" prefix-icon="el-icon-phone-outline"></el-input>
       </el-form-item>
       <el-form-item label="地址">
-        <el-input style="width: 490px;" v-model="form.address" autocomplete="off" placeholder="输入详细地址" prefix-icon="el-icon-location-information"></el-input>
+        <el-input type="textarea" style="width: 490px;" v-model="form.address" autocomplete="off" placeholder="输入详细地址" prefix-icon="el-icon-location-information"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="success" @click="cancel" size="big">取 消</el-button>
@@ -55,8 +55,12 @@ export default{
       this.request.post('/user', this.form).then(res => {
         if (res.code === '200') {
           this.$message.success('保存成功')
-          //更新浏览器存储的用户信息
-          this.getUser().then(res=>{
+
+          // 触发父级更新User的方法
+          this.$emit("refreshUser")
+
+          // 更新浏览器存储的用户信息
+          this.getUser().then(res => {
             res.token = JSON.parse(localStorage.getItem("user")).token
             localStorage.setItem("user",JSON.stringify(res))
           })
@@ -83,6 +87,8 @@ export default{
   display: flex;
   float: right;
   margin-right: 70px;
+  width: 100px;
+  height: 100px;
  }
  .avatar-uploader .el-upload {
     border: 2px solid #d9d9d9;

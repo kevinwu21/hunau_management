@@ -1,13 +1,9 @@
 <template>
   <div>
-      <!-- 搜索栏 -->
-      <div style="margin: 10px 0">
-        <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name" v-on:keyup.enter.native="enterKey"></el-input>
-        <el-button class="ml-5" type="primary" @click="search" style="margin-left: 10px;">搜 索</el-button>
-        <el-button type="warning" @click="reset">重 置</el-button>
-      </div>
+    <div class="top" style="padding-bottom:60px;margin-top: -10px;">
+
       <!-- 操作按钮 -->
-      <div style="margin: 10px 0">
+      <div style="margin: 10px 0;display: flex;float: left;">
         <el-upload :action="'http://' + serverIp + ':8090/file/upload'" :show-file-list="false" :on-success="handleFileUploadSuccess" style="display: inline-block">
           <el-button type="success"><i class="el-icon-upload"></i><span>上传文件</span></el-button>
         </el-upload>
@@ -25,13 +21,24 @@
         </el-popconfirm>
       </div>
 
+      <!-- 搜索栏 -->
+      <div style="margin: 10px 0;display: flex;float: right;">
+        <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name" v-on:keyup.enter.native="enterKey"></el-input>
+        <el-button class="ml-5" type="primary" @click="search" style="margin-left: 10px;"><i class="el-icon-search"></i><span>搜 索</span></el-button>
+        <el-button type="warning" @click="reset"><i class="el-icon-refresh"></i><span>重 置</span></el-button>
+      </div>
+    </div>
+
+
+    <div>
       <!-- 表单 -->
       <el-table
       :data="tableData"
       border
       stripe
       :header-cell-class-name="headerBg"
-      @selection-change="handleSelectionChange">
+      @selection-change="handleSelectionChange"
+      >
         <!-- checkbox 复选框 -->
         <el-table-column type="selection" width="39"></el-table-column>
         <!-- 主要信息 -->
@@ -41,12 +48,12 @@
         <el-table-column prop="size" label="文件大小(KB)" width="100" align="center"></el-table-column>
         <el-table-column label="预览" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" @click="preview(scope.row.url)">预 览</el-button>
+            <el-button type="success" @click="preview(scope.row.url)"><i class="el-icon-view"></i><span>预 览</span></el-button>
           </template>
         </el-table-column>
         <el-table-column label="下载" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" @click="download(scope.row.url)">下 载</el-button>
+            <el-button type="primary" @click="download(scope.row.url)"><i class="el-icon-download"></i><span>下 载</span></el-button>
           </template>
         </el-table-column>
         <el-table-column label="启用" align="center">
@@ -56,7 +63,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-popconfirm
             style="margin-left: 10px;"
@@ -81,16 +88,15 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageNum"
-          :page-sizes="[2, 8, 10, 20]"
-          :page-size="8"
+          :page-sizes="[2, 9, 11, 20]"
+          :page-size="9"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           style="margin: 30px 0 10px 50px"
         >
         </el-pagination>
       </div>
-
-
+    </div>
   </div>
 </template>
 
@@ -106,7 +112,7 @@ export default{
       // 背景
       headerBg: 'headerBg',
       pageNum:1,
-      pageSize:8,
+      pageSize:9,
       total:0,
     };
   },

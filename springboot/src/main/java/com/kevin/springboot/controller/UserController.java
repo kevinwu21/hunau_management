@@ -46,27 +46,31 @@ public class UserController {
         return Result.success(userService.saveOrUpdate(user));
     }
 
-    //删除单条记录
+    // 删除单条记录
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
         return Result.success(userService.removeById(id)) ;
     }
 
+    // 批量删除
     @PostMapping("/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         return Result.success(userService.removeByIds(ids));
     }
 
+    // 查询所有
     @GetMapping
     public Result findAll() {
         return Result.success(userService.list());
     }
 
+    // 根据 ID 查询
     @GetMapping("/{id}")
     public Result findOne(@PathVariable Integer id) {
         return Result.success(userService.getById(id));
     }
 
+    // 根据 username 查询
     @GetMapping("/username/{username}")
     public Result findOne(@PathVariable String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -74,6 +78,7 @@ public class UserController {
         return Result.success(userService.getOne(queryWrapper));
     }
 
+    // 分页查询
     @GetMapping("/page")
     public Result findPage(@RequestParam Integer pageNum,
                                @RequestParam Integer pageSize,
@@ -165,7 +170,7 @@ public class UserController {
         return Result.success(true);
     }
 
-    // 登陆接口
+    // 登录接口
     @PostMapping("/login")
     public Result login(@RequestBody UserDTO userDTO){
         String username = userDTO.getUsername();

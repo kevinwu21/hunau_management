@@ -1,34 +1,36 @@
 <template>
   <div>
     <div>
-      <!-- 查询框 -->
-      <div style="margin: 10px 0" class="three-input">
-        <el-input style="width: 200px" placeholder="请输入姓名" prefix-icon="el-icon-search" v-model="username" v-on:keyup.enter.native="enterKey"></el-input>
-        <el-input style="width: 200px" placeholder="请输入邮箱" prefix-icon="el-icon-message" v-model="email" v-on:keyup.enter.native="enterKey"></el-input>
-        <el-input style="width: 200px" placeholder="请输入地址" prefix-icon="el-icon-position" v-model="address" v-on:keyup.enter.native="enterKey"></el-input>
-        <el-button type="primary" v-on:click="search">搜 索</el-button>
-        <el-button type="danger" v-on:click="reset">重 制</el-button>
-      </div>
+      <div class="top" style="padding-bottom: 60px;margin-top: -10px">
+        <!-- 四个操作按钮 -->
+        <div style="margin: 10px 0;display: flex;float: left;">
+          <el-button type="primary" @click="handleAdd"><i class="el-icon-circle-plus-outline"></i><span>新 增</span></el-button>
+          <el-popconfirm
+              style="margin-left: 10px;"
+              confirm-button-text='确定'
+              cancel-button-text='取消'
+              icon="el-icon-info"
+              icon-color="red"
+              title="确定批量删除吗？"
+              size="large"
+              @confirm="delBatch"
+              >
+            <el-button type="danger" slot="reference"><i class="el-icon-remove-outline"></i><span>批量删除</span></el-button>
+          </el-popconfirm>
+          <el-upload :action="'http://' + serverIp + ':8090/user/import'" :show-file-list="false" accept="xlsx" :on-success="handleExcelImportSuccess" style="display: inline-block">
+            <el-button type="warning" style="margin-left: 10px;"><i class="el-icon-upload"></i><span>导 入</span></el-button>
+          </el-upload>
+          <el-button type="success" @click="exp" style="margin-left: 10px;"><i class="el-icon-download"></i><span>导 出</span></el-button>
+        </div>
 
-      <!-- 四个操作按钮 -->
-      <div style="margin: 10px 0">
-        <el-button type="primary" @click="handleAdd"><i class="el-icon-circle-plus-outline"></i><span>新 增</span></el-button>
-        <el-popconfirm
-            style="margin-left: 10px;"
-            confirm-button-text='确定'
-            cancel-button-text='取消'
-            icon="el-icon-info"
-            icon-color="red"
-            title="确定批量删除吗？"
-            size="large"
-            @confirm="delBatch"
-            >
-          <el-button type="danger" slot="reference"><i class="el-icon-remove-outline"></i><span>批量删除</span></el-button>
-        </el-popconfirm>
-        <el-upload :action="'http://' + serverIp + ':8090/user/import'" :show-file-list="false" accept="xlsx" :on-success="handleExcelImportSuccess" style="display: inline-block">
-          <el-button type="warning" style="margin-left: 10px;"><i class="el-icon-upload"></i><span>导 入</span></el-button>
-        </el-upload>
-        <el-button type="success" @click="exp" style="margin-left: 10px;"><i class="el-icon-download"></i><span>导 出</span></el-button>
+        <!-- 查询框 -->
+        <div style="margin: 10px 0;display: flex;float: right;" class="three-input">
+          <el-input style="width: 200px" placeholder="请输入姓名" prefix-icon="el-icon-search" v-model="username" v-on:keyup.enter.native="enterKey"></el-input>
+          <el-input style="width: 200px" placeholder="请输入邮箱" prefix-icon="el-icon-message" v-model="email" v-on:keyup.enter.native="enterKey"></el-input>
+          <el-input style="width: 200px" placeholder="请输入地址" prefix-icon="el-icon-position" v-model="address" v-on:keyup.enter.native="enterKey"></el-input>
+        <el-button type="primary" @click="search" style="margin-left: 10px;"><i class="el-icon-search"></i><span>搜 索</span></el-button>
+        <el-button type="warning" @click="reset"><i class="el-icon-refresh"></i><span>重 置</span></el-button>
+        </div>
       </div>
 
       <!-- 表单 -->
@@ -49,7 +51,7 @@
         <el-table-column prop="address" label="地址" align="center"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" @click="handleEdit(scope.row)"><i class="el-icon-edit"></i><span>编 辑</span></el-button>
+            <el-button type="primary" plain @click="handleEdit(scope.row)"><i class="el-icon-edit"></i><span>编 辑</span></el-button>
             <el-popconfirm
             style="margin-left: 10px;"
             confirm-button-text='确定'
@@ -60,7 +62,7 @@
             size="large"
             @confirm="handleDelete(scope.row.id)"
             >
-              <el-button type="danger" slot="reference"><i class="el-icon-remove-outline"></i><span>删 除</span></el-button>
+              <el-button type="danger" plain slot="reference"><i class="el-icon-remove-outline"></i><span>删 除</span></el-button>
             </el-popconfirm>
           </template>
         </el-table-column>
@@ -82,7 +84,7 @@
             <el-input style="width: 430px;" v-model="form.phone" autocomplete="off" placeholder="输入11位电话号码" maxlenth="11" minlenth="11" prefix-icon="el-icon-phone-outline"></el-input>
           </el-form-item>
           <el-form-item label="地址">
-            <el-input style="width: 430px;" v-model="form.address" autocomplete="off" placeholder="输入详细地址" prefix-icon="el-icon-location-information"></el-input>
+            <el-input type="textarea" style="width: 430px;" v-model="form.address" autocomplete="off" placeholder="输入详细地址" prefix-icon="el-icon-location-information"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -99,8 +101,8 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageNum"
-        :page-sizes="[2, 8, 10, 20]"
-        :page-size="8"
+        :page-sizes="[2, 9, 11, 20]"
+        :page-size="9"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         style="margin: 30px 0 10px 50px"
@@ -125,7 +127,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 8,
+      pageSize: 9,
       // 查询操作
       username: '',
       email: '',
@@ -224,6 +226,7 @@ export default {
       this.request.delete('/user/' + id).then(res => {
         if (res.data) {
           this.$message.success('删除成功')
+          this.pageNum = 1 //非常重要 否则当查询非第一页数据时 查询出的记录会显示不出来
           this.load()
         } else {
           this.$message.error('删除失败')

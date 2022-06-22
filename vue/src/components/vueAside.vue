@@ -11,7 +11,7 @@
         @select="handleSelect"
       >
         <div style="height: 61px; line-height: 61px; text-align: center">
-          <img src="../assets/logo.png" />
+          <img src="../assets/logo.png"/>
           <b style="color: white; vertical-align: middle; margin-left: 10px" v-show="logoTextShow">后台管理系统</b>
         </div>
 
