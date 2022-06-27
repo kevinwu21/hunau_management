@@ -4,8 +4,8 @@
 <h1 align="center" style="margin: 10px 0 20px; font-weight: bold;">Hunau Management</h1>
 <h3 align="center">基于SpringBoot和Vue开发的后台管理系统</h4>
 <p align="center" style="margin-top:30px;">
-  <img alt="logo" src="https://img-blog.csdnimg.cn/ad2e1122bca144c4b1f431ab45516727.png" style="width:100px;margin-right:100px;">
-  <img alt="logo" src="https://img-blog.csdnimg.cn/ab8dc1a3165d401fb87977e884a739e0.png" style="width:30px;margin-left:10px;">
+  <img alt="logo" src="https://img-blog.csdnimg.cn/ad2e1122bca144c4b1f431ab45516727.png" style="width:100px;">
+  <img alt="logo" src="https://img-blog.csdnimg.cn/ab8dc1a3165d401fb87977e884a739e0.png" style="width:30px;margin-left:20px;">
 </p>
 
 ## 项目简介
